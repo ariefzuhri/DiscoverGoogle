@@ -1,0 +1,119 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+}
+
+def versionMajor = "1"
+def versionMinor = "0"
+def versionPatch = "0"
+def versionBuild = "01"
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.ariefzuhri.discovergoogle"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+                "String", "NEWS_BASE_URL", '"https://newsapi.org/v2/"'
+        )
+        buildConfigField(
+                "String", "NEWS_API_KEY", '"f4e99301521e4df29e1396f83ee5b101"'
+        )
+        buildConfigField(
+                "String", "NEWS_PUBLIC_KEY_1", '"sha256/svXYI8MQpjkQ2SAbnIiqZOvk/sdbTlWScBbeJk4Legk="'
+        )
+        buildConfigField(
+                "String", "NEWS_PUBLIC_KEY_2", '"sha256/hS5jJ4P+iQUErBkvoWBQOd1T7VOAYlOVegvv1iMzpxA="'
+        )
+        buildConfigField(
+                "String", "NEWS_PUBLIC_KEY_3", '"sha256/7xmA6N1F1gp6ikj57Bg4DMG0jfUB+mZsEL4mZO0qbfU="'
+        )
+        buildConfigField(
+                "String", "NEWS_PUBLIC_KEY_4", '"sha256/FEzVOUp4dF3gI0ZVPRJhFbSJVXR+uQmMH65xhs1glH4="'
+        )
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'
+            ), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'
+            ), 'proguard-rules.pro'
+
+            versionNameSuffix "-dev$versionBuild"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+
+        coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    // Android Jetpack
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.browser:browser:$browserVersion"
+    implementation "androidx.core:core-ktx:$coreVersion"
+    implementation "androidx.core:core-splashscreen:$splashScreenVersion"
+    implementation "com.google.android.material:material:$materialVersion"
+
+    // Testing
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$junitExtVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+
+    // Desugaring
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugarJdkLibsVersion"
+
+    // Paging
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+
+    // Networking
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+
+    // Parsing the JSON format
+    implementation "com.squareup.moshi:moshi:$moshiVersion"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshiVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofitVersion"
+
+    // Network logging
+    debugImplementation "com.github.chuckerteam.chucker:library:$chuckerVersion"
+    releaseImplementation "com.github.chuckerteam.chucker:library-no-op:$chuckerVersion"
+
+    // Dependency injection framework
+    implementation "io.insert-koin:koin-core:$koinVersion"
+    implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation "io.insert-koin:koin-androidx-compose:$koinVersion"
+
+    // Memory leak detection
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
+
+    // Image loading and caching
+    implementation "io.coil-kt:coil:$coilVersion"
+}

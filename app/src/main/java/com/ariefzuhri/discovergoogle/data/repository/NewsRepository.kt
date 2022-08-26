@@ -4,7 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.ariefzuhri.discovergoogle.common.helper.toDomain
+import com.ariefzuhri.discovergoogle.data.mapper.toDomain
 import com.ariefzuhri.discovergoogle.data.source.remote.NewsPagingSource
 import com.ariefzuhri.discovergoogle.domain.model.Article
 import com.ariefzuhri.discovergoogle.domain.repository.INewsRepository

@@ -20,6 +20,5 @@ fun Context?.openCustomTabs(url: String?) {
             getBitmapFromDrawable(R.drawable.ic_back_24)?.let { icon -> setCloseButtonIcon(icon) }
             build().launchUrl(context, Uri.parse(url))
         }
-
     }
 }

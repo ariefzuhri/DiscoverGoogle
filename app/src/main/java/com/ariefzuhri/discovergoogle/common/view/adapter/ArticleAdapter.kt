@@ -65,7 +65,7 @@ class ArticleAdapter :
 
         private fun ItemArticleBinding.initClickListeners(article: Article) {
             root.setOnClickListener {
-                listener?.onArticleClicked(article)
+                listener?.onItemClick(article)
             }
         }
     }
@@ -76,6 +76,6 @@ class ArticleAdapter :
 
     interface EventListener {
 
-        fun onArticleClicked(article: Article)
+        fun onItemClick(article: Article)
     }
 }

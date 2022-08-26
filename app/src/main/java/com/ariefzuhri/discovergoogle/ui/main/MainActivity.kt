@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         articleAdapter.setEventListener(object : ArticleAdapter.EventListener {
-            override fun onArticleClicked(article: Article) {
+            override fun onItemClick(article: Article) {
                 openCustomTabs(article.url)
             }
         })

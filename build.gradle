@@ -40,5 +40,5 @@ ext {
 
     leakcanaryVersion = '2.9.1'
 
-    coilVersion = '2.1.0'
+    coilVersion = '2.2.0'
 }

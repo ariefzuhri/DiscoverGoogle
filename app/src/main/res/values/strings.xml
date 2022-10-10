@@ -1,8 +1,12 @@
 <resources>
 
     <string name="app_name">Discover Google</string>
-    <string name="tv_source_main">blog.google</string>
 
+    <string name="toast_failed_io_remote">No internet connection</string>
+    <string name="toast_failed_http_remote">%1$s Error code: %2$d</string>
+
+    <string name="tv_source_main">blog.google</string>
+    
     <string name="fuzzydatetime_now">just now</string>
     <plurals name="fuzzydatetime_seconds_ago">
         <item quantity="zero">just now</item>

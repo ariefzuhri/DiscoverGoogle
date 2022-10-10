@@ -1,20 +1,22 @@
 package com.ariefzuhri.discovergoogle.data.source.remote
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ariefzuhri.discovergoogle.common.util.orZero
+import com.ariefzuhri.discovergoogle.data.source.remote.logger.ErrorLogger
 import com.ariefzuhri.discovergoogle.data.source.remote.network.ApiService
 import com.ariefzuhri.discovergoogle.data.source.remote.response.NewsResponse
-import com.ariefzuhri.discovergoogle.data.source.remote.response.util.RemoteResponseStatus
-import java.io.IOException
+import com.ariefzuhri.discovergoogle.data.source.remote.response.ResponseStatus
 import kotlin.math.ceil
 
-class NewsPagingSource(private val apiService: ApiService) :
+class NewsPagingSource(
+    private val apiService: ApiService,
+    private val remoteErrorLogger: ErrorLogger,
+) :
     PagingSource<Int, NewsResponse.ArticlesItem>() {
 
     companion object {
-        private val TAG = NewsPagingSource::class.java.simpleName.toString()
+        private val TAG = NewsPagingSource::class.java.simpleName
         private const val START_PAGE_NUMBER = 1
     }
 
@@ -22,29 +24,21 @@ class NewsPagingSource(private val apiService: ApiService) :
         val nextPageNumber = params.key ?: START_PAGE_NUMBER
         return try {
             val response = apiService.getNews(page = nextPageNumber, pageSize = params.loadSize)
-            if (response.status == RemoteResponseStatus.SUCCESS.id &&
-                response.articles?.isNotEmpty() == true
-            ) {
+            if (response.status == ResponseStatus.SUCCESS.id && response.articles != null) {
                 val totalPageNumber = ceil(
                     response.totalResults.orZero() / params.loadSize.toFloat()
-                )
+                ).toInt()
                 @Suppress("UNCHECKED_CAST")
                 LoadResult.Page(
                     data = response.articles as List<NewsResponse.ArticlesItem>,
                     prevKey = null,
-                    nextKey = if (nextPageNumber < totalPageNumber) nextPageNumber + 1 else null
+                    nextKey = if (nextPageNumber == totalPageNumber) null else nextPageNumber + 1
                 )
             } else {
-                val e = Exception(response.message)
-                LoadResult.Error(e)
+                LoadResult.Error(remoteErrorLogger.e(TAG, response.message))
             }
         } catch (e: Exception) {
-            val errorMessage = when (e) {
-                is IOException -> "Please check your internet connection"
-                else -> "Something went wrong: ${e.message}"
-            }
-            Log.e(TAG, errorMessage, e)
-            LoadResult.Error(e)
+            LoadResult.Error(remoteErrorLogger.e(TAG, e))
         }
     }
 

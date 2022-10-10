@@ -15,6 +15,9 @@ data class NewsResponse(
     @Json(name = "status")
     val status: String? = null,
 
+    @Json(name = "code")
+    val code: String? = null,
+
     @Json(name = "message")
     val message: String? = null,
 ) {

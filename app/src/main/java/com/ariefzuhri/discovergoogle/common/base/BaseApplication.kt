@@ -2,10 +2,7 @@ package com.ariefzuhri.discovergoogle.common.base
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.ariefzuhri.discovergoogle.di.networkModule
-import com.ariefzuhri.discovergoogle.di.repositoryModule
-import com.ariefzuhri.discovergoogle.di.useCaseModule
-import com.ariefzuhri.discovergoogle.di.viewModelModule
+import com.ariefzuhri.discovergoogle.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -25,6 +22,7 @@ class BaseApplication : Application() {
             androidLogger(Level.NONE)
             androidContext(this@BaseApplication)
             modules(
+                loggerModule,
                 networkModule,
                 repositoryModule,
                 useCaseModule,

@@ -35,19 +35,19 @@ object ApiConfig {
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(chuckerInterceptor)
+            .certificatePinner(certificatePinner)
             .connectTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .readTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .callTimeout(NETWORK_TIMEOUT_SECONDS, TimeUnit.SECONDS)
-            .certificatePinner(certificatePinner)
             .build()
     }
 
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.NEWS_BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
             .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
     }
 

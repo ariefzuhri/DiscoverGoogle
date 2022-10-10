@@ -4,8 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ariefzuhri.discovergoogle.common.action.openCustomTabs
+import com.ariefzuhri.discovergoogle.common.util.gone
+import com.ariefzuhri.discovergoogle.common.util.showToast
+import com.ariefzuhri.discovergoogle.common.util.visible
 import com.ariefzuhri.discovergoogle.common.view.adapter.ArticleAdapter
 import com.ariefzuhri.discovergoogle.databinding.ActivityMainBinding
 import com.ariefzuhri.discovergoogle.domain.model.Article
@@ -18,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModel()
 
-    private val articleAdapter = ArticleAdapter()
+    private lateinit var articleAdapter: ArticleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +32,27 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initArticleAdapter()
         initArticleRecyclerView()
         populateArticleAdapter()
+    }
+
+    private fun initArticleAdapter() {
+        articleAdapter = ArticleAdapter().apply {
+            setEventListener(object : ArticleAdapter.EventListener {
+                override fun onItemClick(article: Article) {
+                    openCustomTabs(article.url)
+                }
+            })
+
+            addLoadStateListener { loadState ->
+                when (val currentState = loadState.refresh) {
+                    is LoadState.Loading -> binding.pbArticle.visible()
+                    is LoadState.Error -> showToast(currentState.error.message)
+                    is LoadState.NotLoading -> binding.pbArticle.gone(true)
+                }
+            }
+        }
     }
 
     private fun initArticleRecyclerView() {
@@ -37,12 +60,6 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = articleAdapter
         }
-
-        articleAdapter.setEventListener(object : ArticleAdapter.EventListener {
-            override fun onItemClick(article: Article) {
-                openCustomTabs(article.url)
-            }
-        })
     }
 
     private fun populateArticleAdapter() {
